@@ -23,8 +23,26 @@ public class SwaggerConfig extends WebMvcConfigurationSupport{
 		return new Docket(DocumentationType.SWAGGER_2).select()
 				.apis(RequestHandlerSelectors.basePackage("com.restapi.controller"))
 				.paths(PathSelectors.any())
-				.build();		
+				.build()
+				.apiInfo(metaData());		
 	}
 	 
-    
+	private ApiInfo metaData() {
+        return new ApiInfoBuilder()
+                .title("Spring Boot REST API With Swagger")
+                .description("\"Spring Boot REST API for Student Info\"")
+                .version("1.0.0")
+                .license("Apache License Version 2.0")
+                .licenseUrl("https://www.apache.org/licenses/LICENSE-2.0\"")
+                .contact(new Contact("Anuj Pathak", "https://github.com/apathak1912", "apathak1912@gmail.com"))
+                .build();
+    }
+    @Override
+    protected void addResourceHandlers(ResourceHandlerRegistry registry) {
+        registry.addResourceHandler("swagger-ui.html")
+                .addResourceLocations("classpath:/META-INF/resources/");
+
+        registry.addResourceHandler("/webjars/**")
+                .addResourceLocations("classpath:/META-INF/resources/webjars/");
+    }
 }

@@ -3,6 +3,7 @@ package com.restapi.controller;
 import javax.validation.Valid;
 import javax.validation.constraints.Size;
 
+import org.apache.commons.lang3.StringEscapeUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -26,7 +27,7 @@ import io.swagger.annotations.ApiResponses;
 
 @Api(value = "certification")
 @org.springframework.web.bind.annotation.RestController
-@RequestMapping(value = {"local/sayhello","system/sayhello","int/sayhello","prod/sayhello"})
+@RequestMapping(value = {"local/studentinfo","system/studentinfo","int/studentinfo","prod/studentinfo"})
 public class RestController {
 	
 	@Autowired
@@ -36,7 +37,7 @@ public class RestController {
 	@ApiOperation(value = "this is for echo response" , notes = "the end point for echo")
 	@ApiResponses(value = {@ApiResponse(code = 200, message = "recived the response"),
 			@ApiResponse(code =500, message = "internol server error")})
-	@GetMapping(value = "/echo{studentId}")
+	@GetMapping(value = "/echo/{studentId}")
 	public ResponseEntity<Response> getResponse(
 			@PathVariable(name = "studentId", required = true ) String studentId,
 			@Size(min = 3,max = 10,message = "first name should be minimum of  three charecter or maximum of 10 charecter")
@@ -57,11 +58,12 @@ public class RestController {
 	@ApiOperation(value = "This api will save studentInfo " , notes = "the end point for persisting student information")
 	@ApiResponses(value = {@ApiResponse(code = 200, message = "student information saved success fully"),
 			@ApiResponse(code =500, message = "internol server error", response = String.class)})
-	@PostMapping(value = "/practice/studentname/{studentname}/studentclass/{studentclass}/studentadd/{studentadd}/saveStudentInfo")
+	@PostMapping(value = "/studentname/{studentname}/studentclass/{studentclass}/studentadd/{studentadd}/saveStudentInfo")
 	public ResponseEntity saveStudentInfo(
 			@PathVariable(name = "studentname", required = true ) String studentname,
 			@PathVariable(name = "studentclass", required = true ) String studentclass,
 			@PathVariable(name = "studentadd", required = true ) String studentadd){
+		    studentname = StringEscapeUtils.escapeHtml3(studentname);//it will senetized the path variabl so no buddy can inject script
 		StudentEntity studentEntity = StudentEntity.builder().name(studentname).Address(studentadd).std(studentclass)
 				.build();
 		boolean isStudentInfoSaved = studentService.saveStudentInfo(studentEntity);
