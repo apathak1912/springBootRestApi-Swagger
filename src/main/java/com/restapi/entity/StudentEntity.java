@@ -9,14 +9,20 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.Table;
 
+import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
 @Entity
 @Table(name ="Student")
 @Data
 @Builder
+@NoArgsConstructor
+@AllArgsConstructor
 public class StudentEntity {
+	
+
 	@Id
 	@GeneratedValue(strategy = GenerationType.AUTO)
 	@Column(name = "STUDENT_ID" ,nullable = false)
